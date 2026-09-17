@@ -2,8 +2,10 @@ package redisdb
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
+	"strings"
 
 	"livepoll/config"
 
@@ -14,11 +16,28 @@ var Client *redis.Client
 
 // Connect initialises the Redis client and verifies connectivity.
 func Connect() {
-	Client = redis.NewClient(&redis.Options{
-		Addr:     config.App.RedisAddr,
-		Password: config.App.RedisPassword,
-		DB:       0,
-	})
+	var opts *redis.Options
+
+	if strings.HasPrefix(config.App.RedisAddr, "redis://") || strings.HasPrefix(config.App.RedisAddr, "rediss://") {
+		var err error
+		opts, err = redis.ParseURL(config.App.RedisAddr)
+		if err != nil {
+			log.Fatalf("[redis] invalid redis URL: %v", err)
+		}
+	} else {
+		opts = &redis.Options{
+			Addr:     config.App.RedisAddr,
+			Password: config.App.RedisPassword,
+			DB:       0,
+		}
+		if strings.Contains(config.App.RedisAddr, "upstash.io") {
+			opts.TLSConfig = &tls.Config{
+				MinVersion: tls.VersionTLS12,
+			}
+		}
+	}
+
+	Client = redis.NewClient(opts)
 
 	ctx := context.Background()
 	if err := Client.Ping(ctx).Err(); err != nil {
