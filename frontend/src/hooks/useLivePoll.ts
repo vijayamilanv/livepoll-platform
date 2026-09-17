@@ -6,7 +6,7 @@ interface WSMessage {
   counts: VoteCount[];
 }
 
-const WS_BASE = import.meta.env.VITE_WS_URL || 'ws://localhost:8080';
+const WS_BASE = import.meta.env.VITE_WS_URL || 'wss://livepoll-platform.onrender.com';
 const RECONNECT_DELAY_MS = 3000;
 
 export const useLivePoll = (shareCode: string, pollId: string | null) => {
