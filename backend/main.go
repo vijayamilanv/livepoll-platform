@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"livepoll/config"
 	"livepoll/database"
@@ -25,15 +26,27 @@ func main() {
 	// 3. Set up Gin router
 	r := gin.Default()
 
-	// CORS — only allow the configured frontend origin
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{config.App.FrontendURL},
+	// CORS — allow the configured frontend origin safely
+	frontendOrigin := config.App.FrontendURL
+	if frontendOrigin == "" {
+		frontendOrigin = "*"
+	} else if frontendOrigin != "*" && !strings.HasPrefix(frontendOrigin, "http://") && !strings.HasPrefix(frontendOrigin, "https://") {
+		frontendOrigin = "https://" + frontendOrigin
+	}
+
+	corsCfg := cors.Config{
+		AllowOrigins:     []string{frontendOrigin},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		AllowWildcard:    false,
-	}))
+	}
+	if frontendOrigin == "*" {
+		corsCfg.AllowAllOrigins = true
+		corsCfg.AllowOrigins = nil
+		corsCfg.AllowCredentials = false
+	}
+	r.Use(cors.New(corsCfg))
 
 	// 4. Health check
 	r.GET("/health", func(c *gin.Context) {
