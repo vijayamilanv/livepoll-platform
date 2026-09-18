@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -9,38 +8,12 @@ const HomePage = () => {
     <div className="page fade-in" style={{ textAlign: 'center', gap: '2rem' }}>
       {/* Hero */}
       <div style={{ maxWidth: '680px' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: 'rgba(139,92,246,0.1)',
-            border: '1px solid rgba(139,92,246,0.3)',
-            borderRadius: '999px',
-            padding: '0.35rem 1rem',
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            color: 'var(--accent-light)',
-            marginBottom: '1.5rem',
-            letterSpacing: '0.05em',
-          }}
-        >
+        <div className="hero-badge">
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
           REAL-TIME AUDIENCE POLLING
         </div>
 
-        <h1
-          style={{
-            fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-            fontWeight: 800,
-            lineHeight: 1.1,
-            marginBottom: '1.25rem',
-            background: 'linear-gradient(135deg, #f1f5f9 30%, #a78bfa 70%, #06b6d4 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-        >
+        <h1 className="hero-heading">
           Create polls.<br />Watch results live.
         </h1>
 

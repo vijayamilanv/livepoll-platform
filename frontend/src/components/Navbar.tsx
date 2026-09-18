@@ -31,7 +31,7 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontWeight: 600 }}>
               {user?.email}
             </span>
             <Link to="/my-polls" className="btn btn-secondary btn-sm">
