@@ -1,9 +1,10 @@
-
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -18,6 +19,16 @@ const Navbar = () => {
         LivePoll
       </Link>
       <div className="navbar-actions">
+        <button
+          onClick={toggleTheme}
+          className="theme-toggle-btn"
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          aria-label="Toggle Theme"
+          id="theme-toggle-btn"
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+
         {isAuthenticated ? (
           <>
             <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
